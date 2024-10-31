@@ -1,0 +1,50 @@
+# docker-compose.yml
+version: '3'  
+
+services:
+  rabbitmq_tshark:
+    build:
+      context: DockerFile/rabbitmq_with_terminal_shark/.
+
+    image: rabbitmq_tshark:latest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    privileged: true
+    hostname: 1845ab38a1eb
+    mac_address: 02:42:ac:11:00:02
+    environment:
+      - PATH=/opt/rabbitmq/sbin:/opt/erlang/bin:/opt/openssl/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - ERLANG_INSTALL_PATH_PREFIX=/opt/erlang
+      - OPENSSL_INSTALL_PATH_PREFIX=/opt/openssl
+      - RABBITMQ_DATA_DIR=/var/lib/rabbitmq
+      - RABBITMQ_VERSION=latest
+      - RABBITMQ_PGP_KEY_ID=0x0A9AF2115F4687BD29803A206B73A36E6026DFCA
+      - RABBITMQ_HOME=/opt/rabbitmq
+      - HOME=/var/lib/rabbitmq
+      - LANG=C.UTF-8
+      - LANGUAGE=C.UTF-8
+      - LC_ALL=C.UTF-8
+    volumes:
+      - /var/lib/rabbitmq
+    ports:
+      - "15671:15671"
+      - "15672:15672"
+      - "15691:15691"
+      - "15692:15692"
+      - "25672:25672"
+      - "4369:4369"
+      - "5671:5671"
+      - "5672:5672"
+      - "5552:5552"
+
+  setup-python:
+    build:
+      context: DockerFile/Exchange_Set_Up/.
+    image: setup-python:latest
+    depends_on:
+      rabbitmq_tshark:
+        condition: service_healthy
+    command: ["python", "setup.py"]

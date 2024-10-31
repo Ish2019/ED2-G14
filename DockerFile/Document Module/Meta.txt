@@ -1,0 +1,2 @@
+{'Author': 'Ishmaiah Etienne', 'Creator': 'Microsoft® Word for Microsoft 365', 'CreationDate': "D:20241031112529-04'00'", 'ModDate': "D:20241031112529-04'00'", 'Producer': 'Microsoft® Word for Microsoft 365'}
+[<Page:1>, <Page:2>]
